@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  alarmTime: 2019-06-14 10:39:38
+  user: one
+
+two:
+  title: MyString
+  alarmTime: 2019-06-14 10:39:38
+  user: two
