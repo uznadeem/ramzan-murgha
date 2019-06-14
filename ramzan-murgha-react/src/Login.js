@@ -221,7 +221,11 @@ class AlarmTime extends React.Component {
   constructor(props) {
     var moment = require('moment');
     super(props);
-    this.state = {inEditMode: false, inputTime: moment(this.props.alarm.alarmTime).format("hh:mm")};
+    this.state = {
+      inEditMode: false,
+      inputTime: moment(this.props.alarm.alarmTime).format("HH:mm"),
+      widgetTime: moment(this.props.alarm.alarmTime).format("hh:mm A")
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -236,6 +240,7 @@ class AlarmTime extends React.Component {
   }
 
   handleSubmit(alarmId) {
+    var moment = require('moment');
     console.log('Hi');
     const cookies = new Cookies();
     var userCookie = cookies.get('current_user');
@@ -256,8 +261,9 @@ class AlarmTime extends React.Component {
       }, axiosConfig)
       .then((response) => {
         if(response.status === 200) {
-          console.log(response.data)
-          this.setState(prevState => ({ inEditMode: !prevState.inEditMode }));
+          this.setState(prevState => ({ inEditMode: !prevState.inEditMode,
+                                        inputTime: moment(response.data.alarmTime).format("HH:mm"),
+                                        widgetTime: moment(response.data.alarmTime).format("hh:mm A") }));
         }
       })
       .catch(function (response) {
@@ -266,7 +272,6 @@ class AlarmTime extends React.Component {
   }
 
   render() {
-    var moment = require('moment');
     if (this.state.inEditMode) {
       return (
         <div>
@@ -281,7 +286,7 @@ class AlarmTime extends React.Component {
     else {
       return (
         <div>
-          <div className="alarm_time"> {moment(this.props.alarm.alarmTime).format("hh:mm A")} </div>
+          <div className="alarm_time"> {this.state.widgetTime} </div>
           <span onClick={this.handleClick}
                 className="glyphicon glyphicon-pencil margin-left-sm"
                 aria-hidden="true">
