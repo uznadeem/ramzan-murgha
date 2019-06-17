@@ -190,7 +190,8 @@ class Navbar extends React.Component {
 class Clock extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {date: new Date()};
+    this.state = {date: new Date(), alarmToggle: false};
+    this.muteAlarm = this.muteAlarm.bind(this);
   }
 
   componentDidMount() {
@@ -205,14 +206,40 @@ class Clock extends React.Component {
   }
 
   tick() {
-    this.setState({
-      date: new Date()
-    });
+    var moment = require('moment');
+    var alarms = this.props.alarms
+    this.setState({ date: new Date() });
+    for (let i = 0; i < alarms.length; i++) {
+      const alarm_time = moment(alarms[0].alarmTime).format("HH:mm:ss A")
+      const current_time = moment(this.state.date).format("HH:mm:ss A")
+      if (alarm_time === current_time) {
+        var x = document.getElementById("alarmSound");
+        x.play();
+        this.setState({alarmToggle: true});
+      }
+    }
+  }
+
+  muteAlarm () {
+    var audio = document.getElementById("alarmSound");
+    audio.pause();
+    this.setState({alarmToggle: false});
   }
 
   render() {
+    const current_time = new Date().toLocaleTimeString()
+
     return (
-      <h1>{new Date().toLocaleTimeString()}</h1>
+      <div className="text-center">
+        <h1 className="clock"> {current_time} </h1>
+        <button onClick={this.muteAlarm} className={"btn btn-danger btn-sm " + (this.state.alarmToggle ? '' : 'hidden')}>
+          <span className="glyphicon glyphicon-volume-off" aria-hidden="true"></span> Mute
+        </button>
+        <audio id="alarmSound">
+          <source src="https://www.islamcan.com/audio/adhan/azan1.mp3" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
     );
   }
 }
@@ -241,7 +268,7 @@ class AlarmTime extends React.Component {
 
   handleSubmit(alarmId) {
     var moment = require('moment');
-    console.log('Hi');
+    console.log(this.state.inputTime);
     const cookies = new Cookies();
     var userCookie = cookies.get('current_user');
 
@@ -329,7 +356,7 @@ class DashboardMainWidget extends React.Component {
       <div className="container">
         <div className="jumbotron">
           <CockLogo width="8%"/>
-          <Clock />
+          <Clock alarms={alarms} />
           <p>Ramzan Murgha is an Islamic Alarm Application that reminds you of your prayers during Ramadhan.</p>
           <div className="row">
             {alarmWidgets}
@@ -386,6 +413,27 @@ class Login extends React.Component {
       <Dashboard />
     );
   }
+}
+
+function soundAlarm(current_time, alarms) {
+  var moment = require('moment');
+  console.log(moment(alarms[0].alarmTime).format("HH:mm:ss A"));
+  console.log(moment(current_time).format("HH:mm:ss A"));
+
+  console.log(moment(alarms[0].alarmTime).format("HH:mm:ss A") === moment(current_time).format("HH:mm:ss A"));
+
+  var x = document.getElementById("alarmSound");
+
+  if (moment(alarms[0].alarmTime).format("HH:mm:ss A") === moment(current_time).format("HH:mm:ss A")) {
+    x.play();
+  }
+
+  // for (let i = 0; i < alarms.length; i++) {
+  //   if (true) {
+  //     console.log(alarms[i].alarmTime);
+  //   }
+  // }
+  return null;
 }
 
 export default Login;

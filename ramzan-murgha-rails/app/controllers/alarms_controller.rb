@@ -26,7 +26,7 @@ class AlarmsController < ApplicationController
 
   # PATCH/PUT /alarms/1
   def update
-    if @alarm.update(alarm_params)
+    if @alarm.update(alarmTime: alarm_params[:alarmTime].to_time())
       render json: @alarm, status: :ok
     else
       render json: @alarm.errors, status: :unprocessable_entity

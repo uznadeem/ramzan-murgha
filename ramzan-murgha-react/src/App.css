@@ -240,3 +240,8 @@ input[type=time] {
   font-size: 26px;
   display: inline;
 }
+
+.clock {
+  display: inline;
+  vertical-align: -18%;
+}
