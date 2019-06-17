@@ -415,25 +415,4 @@ class Login extends React.Component {
   }
 }
 
-function soundAlarm(current_time, alarms) {
-  var moment = require('moment');
-  console.log(moment(alarms[0].alarmTime).format("HH:mm:ss A"));
-  console.log(moment(current_time).format("HH:mm:ss A"));
-
-  console.log(moment(alarms[0].alarmTime).format("HH:mm:ss A") === moment(current_time).format("HH:mm:ss A"));
-
-  var x = document.getElementById("alarmSound");
-
-  if (moment(alarms[0].alarmTime).format("HH:mm:ss A") === moment(current_time).format("HH:mm:ss A")) {
-    x.play();
-  }
-
-  // for (let i = 0; i < alarms.length; i++) {
-  //   if (true) {
-  //     console.log(alarms[i].alarmTime);
-  //   }
-  // }
-  return null;
-}
-
 export default Login;
